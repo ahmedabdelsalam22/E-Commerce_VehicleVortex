@@ -34,5 +34,24 @@ namespace VehicleVortex.Controllers
 
             return Ok(productCarDtos);
         }
+
+        [HttpGet("car/{id}")]
+        public async Task<IActionResult> GetCarById(int? id)
+        {
+            if (id == null || id == 0) 
+            {
+                return BadRequest();
+            }
+            ProductCar productCar = await _carRepository.Get(tracked: false , filter:x=>x.Id == id);
+
+            if (productCar == null)
+            {
+                return NotFound("no cars founds with this id");
+            }
+
+            var productCarDto = _mapper.Map<ProductCarDto>(productCar);
+
+            return Ok(productCarDto);
+        }
     }
 }
