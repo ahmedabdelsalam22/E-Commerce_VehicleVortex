@@ -22,7 +22,7 @@ namespace VehicleVortex.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("cars")]
+        [HttpGet("allcars")]
         public async Task<IActionResult> GetAllCars()
         {
             IEnumerable<ProductCar> productCars = await _carRepository.GetAll(tracked: false);
