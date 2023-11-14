@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using VehicleVortex.Models;
 using VehicleVortex.Models.Dto;
 using VehicleVortex.Services.IGenericRepositories;
@@ -109,6 +110,27 @@ namespace VehicleVortex.Controllers
             var productCarDtos = _mapper.Map<List<ProductCarDto>>(productCars);
 
             return Ok(productCarDtos);
+        }
+
+        [HttpPost("car/create")]
+        public async Task<IActionResult> CreateCar([FromBody] ProductCarCreateDto createDto)
+        {
+            if (ModelState.IsValid) 
+            {
+                ProductCar productCar = await _carRepository.Get(filter:x=>x.Vin.ToLower() == createDto.Vin.ToLower());
+
+                if (productCar != null) 
+                {
+                    return BadRequest("car already exists");
+                }
+
+                ProductCar productCarToCreate = _mapper.Map<ProductCar>(createDto);
+
+                await _carRepository.Create(productCarToCreate);
+
+                return Ok();
+            }
+            return BadRequest("model is not valid");
         }
     }
 }

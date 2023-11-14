@@ -9,6 +9,7 @@ namespace VehicleVortex.Utilities
         public MappingConfig() 
         {
             CreateMap<ProductCar, ProductCarDto>();
+            CreateMap<ProductCarCreateDto, ProductCar>();
         }
     }
 }
