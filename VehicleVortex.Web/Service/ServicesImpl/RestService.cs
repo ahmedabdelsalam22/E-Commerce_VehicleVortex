@@ -8,14 +8,14 @@ namespace VehicleVortex.Web.Service.ServicesImpl
     {
         private readonly RestClient _restClient;
         private readonly IConfiguration _configuration;
-        //private string? apiUrl = "";
+        private string apiUrl = "";
 
         public RestService(IConfiguration configuration)
         {
             _configuration = configuration;
-            //apiUrl = configuration.GetValue<string>("ServiceUrls:ProductCarAPI");
+            apiUrl = configuration.GetValue<string>("ServiceUrls:ProductCarAPI")!;
 
-            _restClient = new RestClient();
+            _restClient = new RestClient(apiUrl);
         }
 
         public async Task<RestResponse> Delete(string url)
