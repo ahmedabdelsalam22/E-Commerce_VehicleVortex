@@ -1,14 +1,11 @@
 ﻿@using VehicleVortex.Web.Models.Dto;
 @model IEnumerable<ProductCarDto>
 
-
-
-    <div class="row m-4 text-end">
+    <div class="row m-4">
         <div class="col-12">
             <a type="submit" class="btn btn-primary" asp-action="CreateProductCar">Create ProductCar</a>
         </div>
     </div>
-
 
 <table class="table table-stipe">
     <thead>
@@ -51,10 +48,10 @@
                     <img src="@n.ImageUrl" width="100" alt="@n.Model">
                 </th>
                 <td>
-                    <a type="submit" asp-action="UpdateProduct" asp-route-productId="@n.Id" class="btn btn-primary">Update</a>
+                    <a type="submit" asp-action="UpdateProductCar" asp-route-id="@n.Id" class="btn btn-primary">Update</a>
                 </td>
                     <td>
-                        <a type="submit" asp-action="DeleteProduct" asp-route-productId="@n.Id" class="btn btn-danger">Delete</a>
+                    <a type="submit" asp-action="DeleteProductCar" asp-route-id="@n.Id" class="btn btn-danger">Delete</a>
                     </td>
             </tr>
         }

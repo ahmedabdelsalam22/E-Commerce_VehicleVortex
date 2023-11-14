@@ -1,0 +1,100 @@
+﻿@using VehicleVortex.Web.Models.Dto;
+@model ProductCarDto
+@{
+    ViewData["Title"] = "UpdateProductCar";
+}
+
+<div class="row text">
+    <div class="col-md-8 offset-2">
+        <p>
+            <h3>Update car</h3>
+        </p>
+        <div class="row">
+            <div class="col-md-8 offset-2">
+                <form asp-action="UpdateProductCar">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <input hidden asp-for="Id" />
+                    <div class="form-group text-center">
+                        <img id="ProfilePicturePreview" class="border-info rounded-circle" style="max-width: 150px" />
+                    </div>
+                        
+                    <div class="form-group">
+                        <label asp-for="Make" class="control-label"></label>
+                        <input asp-for="Make" class="form-control" />
+                        <span asp-validation-for="Make" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Model" class="control-label"></label>
+                        <input asp-for="Model" class="form-control" />
+                        <span asp-validation-for="Model" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Year" class="control-label"></label>
+                        <input type="number" asp-for="Year" class="form-control" />
+                        <span asp-validation-for="Year" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Color" class="control-label"></label>
+                        <input type="text" asp-for="Color" class="form-control" />
+                        <span asp-validation-for="Color" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Vin" class="control-label"></label>
+                        <input type="text" asp-for="Vin" class="form-control" />
+                        <span asp-validation-for="Vin" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input type="text" asp-for="Description" class="form-control" />
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Price" class="control-label"></label>
+                        <input type="number" asp-for="Price" class="form-control" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Mileage" class="control-label"></label>
+                        <input type="number" asp-for="Mileage" class="form-control" />
+                        <span asp-validation-for="Mileage" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="TransmissionType" class="control-label"></label>
+                        <input type="text" asp-for="TransmissionType" class="form-control" />
+                        <span asp-validation-for="TransmissionType" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="FuelType" class="control-label"></label>
+                        <input type="text" asp-for="FuelType" class="form-control" />
+                        <span asp-validation-for="FuelType" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ImageUrl" class="control-label"></label>
+                        <input type="text" asp-for="ImageUrl" class="form-control" />
+                        <span asp-validation-for="ImageUrl" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="ListingDate" class="control-label"></label>
+                        <input type="datetime-local" id="endDateTime" name="endDateTime" asp-for="ListingDate" class="form-control" />
+                        <span asp-validation-for="ListingDate" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group m-1">
+                        <input type="submit" value="Create" class="btn btn-outline-success float-right" />
+                        <a class="btn btn-outline-secondary" asp-action="Index">Show All</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+    {
+    <partial name="_ValidationScriptsPartial" />
+}
+
