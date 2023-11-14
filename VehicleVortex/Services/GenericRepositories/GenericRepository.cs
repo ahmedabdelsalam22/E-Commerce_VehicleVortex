@@ -42,9 +42,13 @@ namespace VehicleVortex.Services.GenericRepositories
             return query.FirstOrDefaultAsync();
         }
 
-        public Task<List<T>> GetAll(bool tracked = true)
+        public Task<List<T>> GetAll(Expression<Func<T, bool>>? filter = null, bool tracked = true)
         {
             IQueryable<T> query = _dbSet;
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
             if (!tracked)
             {
                 query = query.AsNoTracking();

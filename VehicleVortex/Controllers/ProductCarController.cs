@@ -53,5 +53,24 @@ namespace VehicleVortex.Controllers
 
             return Ok(productCarDto);
         }
+
+        [HttpGet("cars/{make}")]
+        public async Task<IActionResult> GetCarsByMake(string? make)
+        {
+            if (make == null)
+            {
+                return BadRequest();
+            }
+            IEnumerable<ProductCar> productCars = await _carRepository.GetAll(tracked: false, filter:x=>x.Make.ToLower() == make.ToLower());
+
+            if (productCars == null)
+            {
+                return NotFound($"no cars founds maken of {make}");
+            }
+
+            var productCarDtos = _mapper.Map<List<ProductCarDto>>(productCars);
+
+            return Ok(productCarDtos);
+        }
     }
 }
