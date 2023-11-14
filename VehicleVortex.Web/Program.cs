@@ -1,7 +1,13 @@
+using VehicleVortex.Web.Service.IServices;
+using VehicleVortex.Web.Service.ServicesImpl;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+
+builder.Services.AddScoped<IProductCarRestService, ProductCarRestService>();
 
 var app = builder.Build();
 
