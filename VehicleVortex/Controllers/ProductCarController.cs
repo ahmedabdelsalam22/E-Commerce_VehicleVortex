@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using VehicleVortex.Models;
@@ -127,6 +128,33 @@ namespace VehicleVortex.Controllers
                 ProductCar productCarToCreate = _mapper.Map<ProductCar>(createDto);
 
                 await _carRepository.Create(productCarToCreate);
+
+                return Ok();
+            }
+            return BadRequest("model is not valid");
+        }
+
+        [HttpPut("car/update/{id}")]
+        public async Task<IActionResult> UpdateCar(int? id, [FromBody] ProductCarUpdateDto updateDto) 
+        {
+            if (id == null || id == 0)
+            {
+                return BadRequest();
+            }
+            if (ModelState.IsValid)
+            {
+                ProductCar productCar = await _carRepository.Get(filter: x => x.Id == id , tracked:false);
+
+                if(productCar == null)
+                {
+                    return BadRequest();
+                }
+
+                updateDto.Id = id;
+
+                ProductCar productCarToUpdate = _mapper.Map<ProductCar>(updateDto);
+
+                await _carRepository.Update(productCarToUpdate);
 
                 return Ok();
             }
