@@ -82,6 +82,20 @@ namespace VehicleVortex.Web.Controllers
             return View(carDto);
         }
 
-        
+        public async Task<IActionResult> DeleteProductCar(int? id)
+        {
+            if (id == null || id == 0) 
+            {
+                return BadRequest();
+            }
+            ProductCar productCar = await _carRestService.GetByIdAsync($"api/car/{id}");
+            if (productCar == null)
+            {
+                return BadRequest();
+            }
+            await _carRestService.Delete(url:$"api/car/delete/{id}");
+
+            return RedirectToAction("Index");
+        }
     }
 }
