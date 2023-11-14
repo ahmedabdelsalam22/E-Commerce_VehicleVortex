@@ -160,5 +160,23 @@ namespace VehicleVortex.Controllers
             }
             return BadRequest("model is not valid");
         }
+
+        [HttpDelete("car/delete/{id}")]
+        public async Task<IActionResult> DeleteCar(int? id) 
+        {
+            if (id == null || id == 0)
+            {
+                return BadRequest();
+            }
+            ProductCar productCar = await _carRepository.Get(tracked: false, filter: x => x.Id == id);
+
+            if (productCar == null)
+            {
+                return NotFound("no cars founds to delete");
+            }
+
+            await _carRepository.Delete(productCar);
+            return Ok();
+        }
     }
 }
