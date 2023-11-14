@@ -1,5 +1,6 @@
 using VehicleVortex.Web.Service.IServices;
 using VehicleVortex.Web.Service.ServicesImpl;
+using VehicleVortex.Web.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,8 @@ builder.Services.AddControllersWithViews();
 
 
 builder.Services.AddScoped<IProductCarRestService, ProductCarRestService>();
+
+builder.Services.AddAutoMapper(typeof(MappingConfig));
 
 var app = builder.Build();
 
