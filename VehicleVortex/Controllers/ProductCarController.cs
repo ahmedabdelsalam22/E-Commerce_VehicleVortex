@@ -72,5 +72,43 @@ namespace VehicleVortex.Controllers
 
             return Ok(productCarDtos);
         }
+
+        [HttpGet("allcars/{model}")]
+        public async Task<IActionResult> GetCarsByModel(string? model)
+        {
+            if (model == null)
+            {
+                return BadRequest();
+            }
+            IEnumerable<ProductCar> productCars = await _carRepository.GetAll(tracked: false, filter: x => x.Model.ToLower() == model.ToLower());
+
+            if (productCars == null)
+            {
+                return NotFound($"no cars founds this {model} model");
+            }
+
+            var productCarDtos = _mapper.Map<List<ProductCarDto>>(productCars);
+
+            return Ok(productCarDtos);
+        }
+
+        [HttpGet("getallcars/{fueltype}")]
+        public async Task<IActionResult> GetCarsByFuelType(string? fueltype)
+        {
+            if (fueltype == null)
+            {
+                return BadRequest();
+            }
+            IEnumerable<ProductCar> productCars = await _carRepository.GetAll(tracked: false, filter: x => x.FuelType.ToLower() == fueltype.ToLower());
+
+            if (productCars == null)
+            {
+                return NotFound($"no cars founds this {fueltype} fueltype");
+            }
+
+            var productCarDtos = _mapper.Map<List<ProductCarDto>>(productCars);
+
+            return Ok(productCarDtos);
+        }
     }
 }
