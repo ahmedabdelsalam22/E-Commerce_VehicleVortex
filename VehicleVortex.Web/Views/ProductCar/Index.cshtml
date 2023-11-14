@@ -1,5 +1,61 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using VehicleVortex.Web.Models.Dto;
+@model IEnumerable<ProductCarDto>
+
+
+
+    <div class="row m-4 text-end">
+        <div class="col-12">
+            <a type="submit" class="btn btn-primary" asp-action="CreateProduct">Create Product</a>
+        </div>
+    </div>
+
+
+<table class="table table-stipe">
+    <thead>
+        <tr class="table-active">
+            <th>Id</th>
+            <th>Make</th>
+            <th>Model</th>
+            <th>Year</th>
+            <th>Color</th>
+            <th>Vin</th>
+            <th>Description</th>
+            <th>Price</th>
+            <th>Mileage</th>
+            <th>TransmissionType</th>
+            <th>FuelType</th>
+            <th>ImageUrl</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var n in Model)
+        {
+            <tr>
+                <th>@n.Id</th>
+                <th>@n.Make</th>
+                <th>@n.Model</th>
+                <th>@n.Year</th>
+                <th>@n.Color</th>
+                <th>@n.Vin</th>
+                <th>@n.Description</th>
+                <th>@n.Price</th>
+                <th>@n.Mileage</th>
+                <th>@n.TransmissionType</th>
+                <th>@n.FuelType</th>
+                <th>
+                    <img src="@n.ImageUrl" width="100" alt="@n.Model">
+                </th>
+                <td>
+                    <a type="submit" asp-action="UpdateProduct" asp-route-productId="@n.Id" class="btn btn-primary">Update</a>
+                </td>
+                    <td>
+                        <a type="submit" asp-action="DeleteProduct" asp-route-productId="@n.Id" class="btn btn-danger">Delete</a>
+                    </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
