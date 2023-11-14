@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using VehicleVortex.Web.Models;
+using VehicleVortex.Web.Models.Dto;
 
 namespace VehicleVortex.Web.Utilities
 {
@@ -6,7 +8,7 @@ namespace VehicleVortex.Web.Utilities
     {
         public MappingConfig() 
         {
-            //CreateMap<>();
+            CreateMap<ProductCar,ProductCarDto>().ReverseMap();
         }
     }
 }

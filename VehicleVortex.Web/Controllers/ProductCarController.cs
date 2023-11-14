@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using VehicleVortex.Web.Models;
+using VehicleVortex.Web.Models.Dto;
 using VehicleVortex.Web.Service.IServices;
 
 namespace VehicleVortex.Web.Controllers
@@ -18,7 +19,31 @@ namespace VehicleVortex.Web.Controllers
         public async Task<IActionResult> Index()
         {
             IEnumerable<ProductCar> productCars = await _carRestService.GetAllAsync("api/allcars");
+
+            var productCarDtos = _mapper.Map<List<ProductCarDto>>(productCars);
+
+            return View(productCarDtos);
+        }
+        [HttpGet]
+        public IActionResult CreateProductCar() 
+        {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateProductCar(ProductCarDto carDto) 
+        {
+            if (ModelState.IsValid) 
+            {
+                ProductCar productCarToCreate = _mapper.Map<ProductCar>(carDto);
+
+                var response = await _carRestService.PostAsync(url: "api/car/create", data: productCarToCreate);
+
+                if (response.IsSuccessful) 
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            return View(carDto);
         }
     }
 }
