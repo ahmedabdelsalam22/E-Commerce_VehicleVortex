@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using VehicleVortex.Data;
+using VehicleVortex.Services.GenericRepositories;
+using VehicleVortex.Services.IGenericRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
