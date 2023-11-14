@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using VehicleVortex.Data;
+using VehicleVortex.Services.GenericRepositories;
+using VehicleVortex.Services.IGenericRepositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,6 +14,8 @@ builder.Services.AddSwaggerGen();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(connectionString: connectionString));
+
+builder.Services.AddScoped<IProductCarRepository, ProductCarRepository>();
 
 var app = builder.Build();
 
