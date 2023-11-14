@@ -24,5 +24,26 @@ namespace VehicleVortex.Web.Controllers
 
             return View(productCarDtos);
         }
+        [HttpGet]
+        public IActionResult CreateProductCar() 
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateProductCar(ProductCarDto carDto) 
+        {
+            if (ModelState.IsValid) 
+            {
+                ProductCar productCarToCreate = _mapper.Map<ProductCar>(carDto);
+
+                var response = await _carRestService.PostAsync(url: "api/car/create", data: productCarToCreate);
+
+                if (response.IsSuccessful) 
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            return View(carDto);
+        }
     }
 }

@@ -5,7 +5,7 @@
 
     <div class="row m-4 text-end">
         <div class="col-12">
-            <a type="submit" class="btn btn-primary" asp-action="CreateProduct">Create Product</a>
+            <a type="submit" class="btn btn-primary" asp-action="CreateProductCar">Create ProductCar</a>
         </div>
     </div>
 
@@ -40,7 +40,9 @@
                 <th>@n.Year</th>
                 <th>@n.Color</th>
                 <th>@n.Vin</th>
-                <th>@n.Description</th>
+                <th class="large-text">
+                    @n.Description
+                </th>
                 <th>@n.Price</th>
                 <th>@n.Mileage</th>
                 <th>@n.TransmissionType</th>

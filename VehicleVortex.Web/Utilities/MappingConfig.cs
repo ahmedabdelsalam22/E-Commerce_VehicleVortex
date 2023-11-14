@@ -8,7 +8,7 @@ namespace VehicleVortex.Web.Utilities
     {
         public MappingConfig() 
         {
-            CreateMap<ProductCar,ProductCarDto>();
+            CreateMap<ProductCar,ProductCarDto>().ReverseMap();
         }
     }
 }
