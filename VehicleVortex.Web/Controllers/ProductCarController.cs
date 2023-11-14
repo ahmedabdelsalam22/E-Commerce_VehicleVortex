@@ -10,7 +10,7 @@ namespace VehicleVortex.Web.Controllers
     {
         private readonly IProductCarRestService _carRestService;
         private readonly IMapper _mapper;
-        public ProductCarController(IProductCarRestService carRestService,IMapper mapper)
+        public ProductCarController(IProductCarRestService carRestService, IMapper mapper)
         {
             _carRestService = carRestService;
             _mapper = mapper;
@@ -25,25 +25,63 @@ namespace VehicleVortex.Web.Controllers
             return View(productCarDtos);
         }
         [HttpGet]
-        public IActionResult CreateProductCar() 
+        public IActionResult CreateProductCar()
         {
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> CreateProductCar(ProductCarDto carDto) 
+        public async Task<IActionResult> CreateProductCar(ProductCarDto carDto)
         {
-            if (ModelState.IsValid) 
+            if (ModelState.IsValid)
             {
                 ProductCar productCarToCreate = _mapper.Map<ProductCar>(carDto);
 
                 var response = await _carRestService.PostAsync(url: "api/car/create", data: productCarToCreate);
 
-                if (response.IsSuccessful) 
+                if (response.IsSuccessful)
                 {
                     return RedirectToAction("Index");
                 }
             }
             return View(carDto);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> UpdateProductCar(int? id)
+        {
+            if (id == null || id == 0)
+            {
+                return BadRequest();
+            }
+
+            ProductCar productCar = await _carRestService.GetByIdAsync($"api/car/{id}");
+            if (productCar == null)
+            {
+                return BadRequest();
+            }
+
+            ProductCarDto productCarDto = _mapper.Map<ProductCarDto>(productCar);
+            return View(productCarDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateProductCar(ProductCarDto carDto)
+        {
+            if (ModelState.IsValid)
+            {
+                ProductCar productCarToUpdate = _mapper.Map<ProductCar>(carDto);
+
+                var response = await _carRestService.UpdateAsync(url: $"api/car/update/{carDto.Id}", data: productCarToUpdate);
+
+                if (response != null)
+                {
+                    return RedirectToAction("Index");
+                }
+                return RedirectToAction("Index");
+            }
+            return View(carDto);
+        }
+
+        
     }
 }
