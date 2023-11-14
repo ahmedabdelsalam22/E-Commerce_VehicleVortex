@@ -10,6 +10,7 @@ namespace VehicleVortex.Utilities
         {
             CreateMap<ProductCar, ProductCarDto>();
             CreateMap<ProductCarCreateDto, ProductCar>();
+            CreateMap<ProductCarUpdateDto, ProductCar>();
         }
     }
 }
