@@ -4,7 +4,7 @@ using VehicleVortex.Models;
 
 namespace VehicleVortex.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -12,6 +12,7 @@ namespace VehicleVortex.Data
         }
 
         public DbSet<ProductCar> ProductCars { get; set; }
+        public DbSet<AppUser> AppUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
