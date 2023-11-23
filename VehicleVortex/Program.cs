@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using VehicleVortex.Data;
 using VehicleVortex.Models;
+using VehicleVortex.Services.AuthServices.AuthServiceImpl;
+using VehicleVortex.Services.AuthServices.IAuthServices;
 using VehicleVortex.Services.GenericRepositories;
 using VehicleVortex.Services.IGenericRepositories;
 using VehicleVortex.Utilities;
@@ -24,6 +26,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(opt => opt.UseSqlServer(conn
 builder.Services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>().AddDefaultTokenProviders();
 
 builder.Services.AddScoped<IProductCarRepository, ProductCarRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 
 builder.Services.AddAutoMapper(typeof(MappingConfig));

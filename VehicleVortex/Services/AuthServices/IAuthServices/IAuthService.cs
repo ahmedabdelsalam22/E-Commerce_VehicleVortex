@@ -9,7 +9,6 @@ namespace VehicleVortex.Services.AuthServices.IAuthServices
         string GenerateToken(AppUser user, IEnumerable<string> roles);
         bool IsUniqueUser(string username);
         Task<AppUserDto> Register(RegisterRequestDTO registerRequestDTO);
-
         Task<bool> AssignRole(string email, string roleName);
     }
 }
