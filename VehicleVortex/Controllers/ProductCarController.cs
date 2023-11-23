@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -23,6 +24,7 @@ namespace VehicleVortex.Controllers
         }
 
         [HttpGet("allcars")]
+        [Authorize]
         public async Task<IActionResult> GetAllCars()
         {
             IEnumerable<ProductCar> productCars = await _carRepository.GetAll(tracked: false);
@@ -38,6 +40,7 @@ namespace VehicleVortex.Controllers
         }
 
         [HttpGet("car/{id}")]
+        [Authorize]
         public async Task<IActionResult> GetCarById(int? id)
         {
             if (id == null || id == 0) 
@@ -57,6 +60,7 @@ namespace VehicleVortex.Controllers
         }
 
         [HttpGet("cars/{make}")]
+        [Authorize]
         public async Task<IActionResult> GetCarsByMake(string? make)
         {
             if (make == null)
@@ -76,6 +80,7 @@ namespace VehicleVortex.Controllers
         }
 
         [HttpGet("allcars/{model}")]
+        [Authorize]
         public async Task<IActionResult> GetCarsByModel(string? model)
         {
             if (model == null)
@@ -95,6 +100,7 @@ namespace VehicleVortex.Controllers
         }
 
         [HttpGet("getallcars/{fueltype}")]
+        [Authorize]
         public async Task<IActionResult> GetCarsByFuelType(string? fueltype)
         {
             if (fueltype == null)
@@ -114,6 +120,7 @@ namespace VehicleVortex.Controllers
         }
 
         [HttpPost("car/create")]
+        [Authorize(Roles ="Admin")]
         public async Task<IActionResult> CreateCar([FromBody] ProductCarCreateDto createDto)
         {
             if (ModelState.IsValid) 
@@ -135,6 +142,7 @@ namespace VehicleVortex.Controllers
         }
 
         [HttpPut("car/update/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> UpdateCar(int? id, [FromBody] ProductCarUpdateDto updateDto) 
         {
             if (id == null || id == 0)
@@ -162,6 +170,7 @@ namespace VehicleVortex.Controllers
         }
 
         [HttpDelete("car/delete/{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteCar(int? id) 
         {
             if (id == null || id == 0)
