@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using VehicleVortex.Models;
@@ -58,6 +59,17 @@ namespace VehicleVortex.Controllers
             }
         }
 
+        [HttpPost("assignRole")]
+        [Authorize(Roles = "Admin")]
+        public async Task<ActionResult> AssignRole(RegisterRequestDTO model, string roleName)
+        {
+            bool roleIsAssigned = await _service.AssignRole(model.Email, roleName!.ToUpper());
+            if (!roleIsAssigned)
+            {
+                return BadRequest("error occured!");
+            }
+            return Ok("role assigned successfully");
+        }
 
     }
 }
