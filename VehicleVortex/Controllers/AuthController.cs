@@ -61,9 +61,9 @@ namespace VehicleVortex.Controllers
 
         [HttpPost("assignRole")]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> AssignRole(RegisterRequestDTO model, string roleName)
+        public async Task<ActionResult> AssignRole(string email, string roleName)
         {
-            bool roleIsAssigned = await _service.AssignRole(model.Email, roleName!.ToUpper());
+            bool roleIsAssigned = await _service.AssignRole(email, roleName!.ToUpper());
             if (!roleIsAssigned)
             {
                 return BadRequest("error occured!");

@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Text;
 using VehicleVortex.Data;
 using VehicleVortex.Models;
 using VehicleVortex.Services.AuthServices.AuthServiceImpl;
@@ -61,7 +63,7 @@ builder.Services.AddAuthentication(x => {
     x.TokenValidationParameters = new TokenValidationParameters
     {
         ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey!)),
+        //IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes()),
         ValidateIssuer = false,
         ValidateAudience = false
     };
