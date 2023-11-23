@@ -32,6 +32,16 @@ namespace VehicleVortex.Services.AuthServices.AuthServiceImpl
             _jwtOptions = jwtOptions.Value;
         }
 
+        public bool IsUniqueUser(string username)
+        {
+            var user = _dbContext.AppUsers.FirstOrDefault(x => x.UserName == username);
+            if (user == null)
+            {
+                return true;
+            }
+            return false;
+        }
+
         public string GenerateToken(AppUser user, IEnumerable<string> roles)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
