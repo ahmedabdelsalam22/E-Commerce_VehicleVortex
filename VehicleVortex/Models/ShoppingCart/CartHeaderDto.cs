@@ -6,6 +6,6 @@ namespace VehicleVortex.Models.ShoppingCart
     {
         public int CartHeaderId { get; set; }
         public double CartTotal { get; set; }
-        public int? UserId { get; set; }
+        public string? UserId { get; set; }
     }
 }
