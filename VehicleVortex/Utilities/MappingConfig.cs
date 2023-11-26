@@ -16,6 +16,7 @@ namespace VehicleVortex.Utilities
             CreateMap<AppUser, AppUserDto>();
 
             CreateMap<CartHeaderDto, CartHeader>();
+            CreateMap<ProductCar, ProductCarDto>();
 
         }
     }

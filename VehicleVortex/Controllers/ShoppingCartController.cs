@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.PortableExecutable;
 using VehicleVortex.Data;
+using VehicleVortex.Models;
 using VehicleVortex.Models.Dto;
 using VehicleVortex.Models.ShoppingCart;
+using VehicleVortex.Services.IGenericRepositories;
 
 namespace VehicleVortex.Controllers
 {
@@ -16,12 +18,14 @@ namespace VehicleVortex.Controllers
         private readonly ApplicationDbContext _context;
         private IMapper _mapper;
         private ResponseDto _responseDto;
+        private IProductCarRepository _carRepository;
 
-        public ShoppingCartController(ApplicationDbContext context, IMapper mapper)
+        public ShoppingCartController(ApplicationDbContext context, IMapper mapper, IProductCarRepository productCarRepository)
         {
             _context = context;
             _mapper = mapper;
             _responseDto = new ResponseDto();
+            _carRepository = productCarRepository;
         }
 
         [HttpPost("cartUpsert")]
@@ -112,5 +116,37 @@ namespace VehicleVortex.Controllers
                 return BadRequest(ex.ToString());
             }
         }
+
+        [HttpGet("getCart/{userId}")]
+        public async Task<ActionResult> GetCart(string userId)
+        {
+            try
+            {
+                CartDto cart = new()
+                {
+                    CartHeaderDto = _mapper.Map<CartHeaderDto>(_context.CartHeaders.First(u => u.UserId == userId))
+                };
+                cart.CartDetailsDtos = _mapper.Map<IEnumerable<CartDetailsDto>>(_context.CartDetails
+                    .Where(u => u.CartHeaderId == cart.CartHeaderDto.CartHeaderId));
+
+                IEnumerable<ProductCar> productCars = await _carRepository.GetAll(tracked: false);
+
+                List<ProductCarDto> productDtos = _mapper.Map<List<ProductCarDto>>(productCars);
+
+                foreach (var item in cart.CartDetailsDtos)
+                {
+                    item.Product = productDtos.FirstOrDefault(u => u.Id == item.ProductId);
+
+                    cart.CartHeaderDto.CartTotal += (item.Count * item.Product.Price); // here we should get product from "ProductAPI" which means microservices. 
+                }
+
+                return Ok(cart);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
     }
 }
