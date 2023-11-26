@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using VehicleVortex.Models;
 using VehicleVortex.Models.Dto;
+using VehicleVortex.Models.ShoppingCart;
 
 namespace VehicleVortex.Utilities
 {
@@ -13,6 +14,8 @@ namespace VehicleVortex.Utilities
             CreateMap<ProductCarUpdateDto, ProductCar>();
 
             CreateMap<AppUser, AppUserDto>();
+
+            CreateMap<CartHeaderDto, CartHeader>();
 
         }
     }
