@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
 using Stripe.Checkout;
 using VehicleVortex.Data;
 using VehicleVortex.Models.Dto;
@@ -102,6 +103,36 @@ namespace VehicleVortex.Controllers
             return Ok(stripeRequestDto);
         }
 
+        [Authorize]
+        [HttpPost("ValidateStripeSession/{orderHeaderId}")]
+        public async Task<ActionResult<OrderHeaderDto>> ValidateStripeSession([FromBody] int orderHeaderId)
+        {
+            try
+            {
 
+                OrderHeader orderHeader = _context.OrderHeaders.First(u => u.OrderHeaderId == orderHeaderId);
+
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.StripeSessionId);
+
+                //PaymentIntent obj to can access payment status 
+                var paymentIntentService = new PaymentIntentService();
+                PaymentIntent paymentIntent = paymentIntentService.Get(session.PaymentIntentId);
+
+                if (paymentIntent.Status == "succeeded")
+                {
+                    //then payment was successful
+                    orderHeader.PaymentIntentId = paymentIntent.Id;
+                    orderHeader.Status = SD.Status_Approved;
+                    _context.SaveChanges();
+
+                }
+                return Ok(_mapper.Map<OrderHeaderDto>(orderHeader));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }
