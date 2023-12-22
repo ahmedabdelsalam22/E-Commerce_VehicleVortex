@@ -19,7 +19,7 @@ namespace VehicleVortex.Models
         [Required]
         public string Description { get; set; } // Description or additional details about the car
         [Required]
-        public decimal Price { get; set; } // Price of the car
+        public double Price { get; set; } // Price of the car
         [Required]
         public int Mileage { get; set; } // Mileage of the car
         [Required]
