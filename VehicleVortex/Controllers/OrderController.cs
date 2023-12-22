@@ -2,9 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Stripe;
+using Stripe.Checkout;
 using VehicleVortex.Data;
 using VehicleVortex.Models.Dto;
 using VehicleVortex.Models.Order;
+using VehicleVortex.Models.Payment;
 using VehicleVortex.Models.ShoppingCart;
 using VehicleVortex.Services.IGenericRepositories;
 using VehicleVortex.Utilities;
@@ -54,6 +57,82 @@ namespace VehicleVortex.Controllers
             return _responseDto;
         }
 
+        [Authorize]
+        [HttpPost("CreateStripeSession")]
+        public async Task<ActionResult<StripeRequestDto>> CreateStripeSession([FromBody] StripeRequestDto stripeRequestDto)
+        {
 
+            var options = new SessionCreateOptions
+            {
+                SuccessUrl = stripeRequestDto.ApprovedUrl,
+                CancelUrl = stripeRequestDto.CancelUrl,
+                LineItems = new List<SessionLineItemOptions>(),
+                Mode = "payment",
+            };
+
+
+            foreach (var item in stripeRequestDto.OrderHeaderDto.OrderDetailsDtos)
+            {
+                var sessionLineItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long)(item.Price * 100), // if price 20$ , the unitAmout will be 20.00
+                        Currency = "usd",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = item.ProductName
+                        }
+                    },
+                    Quantity = item.Count
+                };
+                options.LineItems.Add(sessionLineItem);
+            }
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            stripeRequestDto.StripeSessionUrl = session.Url;
+
+
+            OrderHeader orderHeader = _context.OrderHeaders.First(x => x.OrderHeaderId == stripeRequestDto.OrderHeaderDto.OrderHeaderId);
+
+            orderHeader.StripeSessionId = session.Id;
+            _context.SaveChanges();
+
+            return Ok(stripeRequestDto);
+        }
+
+        [Authorize]
+        [HttpPost("ValidateStripeSession/{orderHeaderId}")]
+        public async Task<ActionResult<OrderHeaderDto>> ValidateStripeSession([FromBody] int orderHeaderId)
+        {
+            try
+            {
+
+                OrderHeader orderHeader = _context.OrderHeaders.First(u => u.OrderHeaderId == orderHeaderId);
+
+                var service = new SessionService();
+                Session session = service.Get(orderHeader.StripeSessionId);
+
+                //PaymentIntent obj to can access payment status 
+                var paymentIntentService = new PaymentIntentService();
+                PaymentIntent paymentIntent = paymentIntentService.Get(session.PaymentIntentId);
+
+                if (paymentIntent.Status == "succeeded")
+                {
+                    //then payment was successful
+                    orderHeader.PaymentIntentId = paymentIntent.Id;
+                    orderHeader.Status = SD.Status_Approved;
+                    _context.SaveChanges();
+
+                }
+                return Ok(_mapper.Map<OrderHeaderDto>(orderHeader));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
     }
 }
