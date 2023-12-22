@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,7 @@ namespace VehicleVortex.Controllers
             _responseDto = new ResponseDto();
             _carRepository = productCarRepository;
         }
-
+        [Authorize]
         [HttpPost("cartUpsert")]
         public async Task<ResponseDto> CartUpsert(CartDto cartDto) 
         {
@@ -89,6 +90,7 @@ namespace VehicleVortex.Controllers
             return _responseDto;
         }
 
+        [Authorize]
         [HttpPost("RemoveCart")]
         public async Task<IActionResult> RemoveCart([FromBody] int cartDetailsId)
         {
@@ -117,6 +119,7 @@ namespace VehicleVortex.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet("getCart/{userId}")]
         public async Task<ActionResult> GetCart(string userId)
         {
